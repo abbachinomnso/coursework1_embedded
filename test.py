@@ -12,6 +12,7 @@ def do_connect():
 
 from machine import Pin, I2C
 from umqtt.simple import MQTTClient
+import sys
 
 do_connect()
 
@@ -33,16 +34,17 @@ i2c.writeto_mem(addr, CTRL_Reg1, bytearray([23]))
 
 
 #I2C.readfrom_mem(addr, memaddr, nbytes)
-alpha = (i2c.readfrom_mem(addr,CTRL_Reg1,1))
+alpha = i2c.readfrom_mem(addr,CTRL_Reg1,1)
 
-beta = (i2c.readfrom_mem(addr,OUT_RegX_H,1),i2c.readfrom_mem(addr,OUT_RegX_L,1))
-gamma = (i2c.readfrom_mem(addr,OUT_RegY_H,1),i2c.readfrom_mem(addr,OUT_RegY_L,1))
-delta = (i2c.readfrom_mem(addr,OUT_RegZ_H,1),i2c.readfrom_mem(addr,OUT_RegZ_L,1))
+print(i2c.readfrom_mem(addr,OUT_RegX_H,1),i2c.readfrom_mem(addr,OUT_RegX_L,1))
+print(i2c.readfrom_mem(addr,OUT_RegY_H,1),i2c.readfrom_mem(addr,OUT_RegY_L,1))
+print(i2c.readfrom_mem(addr,OUT_RegZ_H,1),i2c.readfrom_mem(addr,OUT_RegZ_L,1))
 
-print (alpha)
-print (beta)
-print (gamma)
-print (delta)
+
+client = MQTTClient('unnamed1', '192.168.0.10')
+client.connect()
+client.publish('esys/<fantastic four>/...', bytearray(str(alpha)))
+
 
 
 
